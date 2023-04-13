@@ -5,59 +5,14 @@ import java.io.IOException;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.math.BigDecimal;
-import java.util.*;
-
-class A {
-    public int a = 1;
-    public Integer b = 100;
-    public BigDecimal c = BigDecimal.valueOf(3.14159265);
-
-    public int[] intArray = {1,2,3,4};
-    public List<Float> floatList = new ArrayList<>();
-    public Map<Integer, String> hashMap = new HashMap<>();
-
-    public B nested = new B();
-
-    public A() {
-        this.floatList.add(1.0f);
-        this.floatList.add(2.0f);
-
-        this.hashMap.put(1, "one");
-    }
-}
-
-class B {
-    public int a = 6;
-    public C nested = new C();
-}
-
-class C {
-    public String a = "This is C";
-}
+import java.util.Collection;
+import java.util.Map;
 
 public class JsonGenerator {
-    public static void main(String[] args) {
-        try {
-            String directory = "./generated_jsons/"; // Directory to save the jsons to
-
-            // Generating one file at a time
-            JsonGenerator.generateJsonFile(new A(), directory);
-            JsonGenerator.generateJsonFile(new C(), directory);
-
-            // Generating multiple files at once
-            Object[] objects = {new A(), new B(), new C()};
-            JsonGenerator.generateJsonFiles(objects, directory);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     /**
      * Create a json file for the state of each object
      *
-     * @param objects the objects to store the states of
+     * @param objects   the objects to store the states of
      * @param directory the directory store the json files in
      * @throws IOException occurs when there was an error creating the file due to an invalid directory
      */
@@ -70,7 +25,7 @@ public class JsonGenerator {
     /**
      * Create a json file for the state of a specified object
      *
-     * @param object the object to store the states of
+     * @param object    the object to store the states of
      * @param directory the directory store the json files in
      * @throws IOException occurs when there was an error creating the file due to an invalid directory
      */
@@ -152,7 +107,7 @@ public class JsonGenerator {
     /**
      * Extracts the attribute name and value from a field
      *
-     * @param field the field
+     * @param field  the field
      * @param object the object which the field belongs to
      * @return a string representing the key value pair
      */
@@ -173,7 +128,7 @@ public class JsonGenerator {
             } else if (attribute instanceof Collection<?>) {
                 valueString = Formatter.stringArray(((Collection<?>) attribute).toArray());
 
-            } else if (attribute instanceof Map<?,?>) {
+            } else if (attribute instanceof Map<?, ?>) {
                 valueString = Formatter.stringArray(((Map<?, ?>) attribute).entrySet().toArray());
 
             } else {
